@@ -56,4 +56,19 @@ public class BinarySearchTree {
         traverseTree(parent, treeInOrder);
         return treeInOrder;
     }
+
+	void reverseTraverseTree(ArrayList<Bin> treeInOrder, Node parent) {
+		
+		if (parent != null) {
+			reverseTraverseTree(treeInOrder, parent.rightChild);
+			treeInOrder.add(parent.value);
+			reverseTraverseTree(treeInOrder, parent.leftChild);
+		}
+	}
+	
+	ArrayList<Bin> reverseTraverse() {
+		ArrayList<Bin> treeInOrder = new ArrayList<>();
+		reverseTraverseTree(treeInOrder, parent);
+		return treeInOrder;
+	}
 }

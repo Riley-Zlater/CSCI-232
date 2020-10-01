@@ -25,16 +25,26 @@ public class BinPacker {
         }
     }
 
-    static Bin bestFit(int next_input, int capacity, ArrayList<Bin> bin_array) {
+static Bin bestFit(int next_input, int capacity, ArrayList<Bin> bin_array) {
+        if (bin_array.isEmpty()) {
+            bin_array.add(new Bin(0, capacity, 0));
+        }
         BinarySearchTree bst = new BinarySearchTree();
         for (Bin bin: bin_array) {
-            bst.add(bin.getCapacity());
+            bst.add(bin);
         }
-        ArrayList<Integer> current_list = bst.traverse();
-
-        return bin_array.get(0);
+        ArrayList<Bin> bin_list = bst.traverse();
+        for (Bin bin: bin_list) {
+            if (bin.getRemaining() >= next_input) {
+                return bin;
+            } else {
+                Bin new_bin = new Bin();
+                new_bin.setBin_number(bin_array.get(-1).getBin_number());
+                return new_bin;
+            }
+        }
+        return null;
     }
-
     public static void main(String [] args) throws FileNotFoundException {
         int capacity = 50;
         Scanner scanner = new Scanner(new File("C:/Users/Riley/eclipse-workspace/CSCI-232/src/outLab2/Test.txt"));

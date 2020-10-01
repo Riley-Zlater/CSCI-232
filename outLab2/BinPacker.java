@@ -25,22 +25,15 @@ public class BinPacker {
         }
     }
 
-    static Bin bestFit(int x, int capacity, ArrayList<Bin> input) {
+    static Bin bestFit(int next_input, int capacity, ArrayList<Bin> bin_array) {
+        BinarySearchTree bst = new BinarySearchTree();
+        for (Bin bin: bin_array) {
+            bst.add(bin.getCapacity());
+        }
+        ArrayList<Integer> current_list = bst.traverse();
 
-    	ArrayList<Integer> remainingArray = new ArrayList<>();
-    	
-    	for (int i = 0; i < input.size(); i++) {
-    		remainingArray.add(input.get(i).getRemaining());
-    	}
-
-    	for (Bin b:input) {
-    		if (b.getRemaining() <= x) {
-    			return b;
-    		}
-    	}
-    	return null;
+        return bin_array.get(0);
     }
-
 
     public static void main(String [] args) throws FileNotFoundException {
         int capacity = 50;

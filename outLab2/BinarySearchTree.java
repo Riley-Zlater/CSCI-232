@@ -1,5 +1,7 @@
 package outLab2;
 
+import java.util.ArrayList;
+
 //import java.util.ArrayList;
 
 //public class BinarySearchTree {
@@ -63,6 +65,22 @@ public class BinarySearchTree {
 	void add(int value) {
 		parent = addElement(parent, value);
 	}
-	
-}
 
+	
+	ArrayList<Integer> traverseTree(Node parent) {
+		
+		ArrayList<Integer> treeInOrder = new ArrayList<>();
+		
+		if (parent != null) {
+			traverseTree(parent.leftChild);
+			treeInOrder.add(parent.value);
+			traverseTree(parent.rightChild);
+		}	
+		return treeInOrder;
+	}
+	
+	
+	void traverse() {
+		traverseTree(parent);
+	}
+}

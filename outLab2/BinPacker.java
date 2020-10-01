@@ -36,10 +36,16 @@ static Bin bestFit(int next_input, int capacity, ArrayList<Bin> bin_array) {
         ArrayList<Bin> bin_list = bst.traverse();
         for (Bin bin: bin_list) {
             if (bin.getRemaining() >= next_input) {
+                bin.setOccupancy(bin.getOccupancy() + next_input);
+                bin.setRemaining(bin.getRemaining() - next_input);
                 return bin;
             } else {
                 Bin new_bin = new Bin();
-                new_bin.setBin_number(bin_array.get(-1).getBin_number());
+                new_bin.setBin_number(bin_array.get(bin_array.size() - 1).getBin_number() + 1);
+                new_bin.setCapacity(capacity);
+                new_bin.setRemaining(capacity - next_input);
+                new_bin.setOccupancy(next_input);
+                bin_array.add(new_bin);
                 return new_bin;
             }
         }

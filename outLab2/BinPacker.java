@@ -111,12 +111,12 @@ public class BinPacker {
 			myWriter.write("\nFirst-fit used " + first_fit_bin_array.size() + " bins. ");
 			myWriter.write("\nBest-fit used " + best_fit_bin_array.size() + " bins. ");
 			myWriter.write("\nWorst-fit used " + worst_fit_bin_array.size() + " bins. ");
-			myWriter.write("\n On average first fit would be the fastest with a run time of O(n)."
-					+ " We hope best fit has a run time of about O(nlgn) because it utilizes a Binary Search Tree."
-					+ " Finally, worst fit should be about the same run time as best fit."
-					+ " First fit and best fit have many different examples that provide efficient cases."
-					+ " Worst fit on the other hand seems almost useless and like a bad combination of "
-					+ " first fit and best fit.");
+			myWriter.write("\nOn average first fit would be the fastest with a run time of O(n)."
+					+ "\nWe hope best fit has a run time of about O(nlgn) because it utilizes a Binary Search Tree."
+					+ "\nFinally, worst fit should be about the same run time as best fit."
+					+ "\nFirst fit and best fit have many different examples that provide efficient cases."
+					+ "\nWorst fit on the other hand seems almost useless and like a bad combination of "
+					+ "\nfirst fit and best fit.");
 			myWriter.close();
 		} catch (IOException e) {
 			System.out.println("Unexpected Error");

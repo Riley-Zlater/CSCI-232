@@ -7,8 +7,24 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.IOException;
 
+/**
+ * This file makes all of the different fits of the bin packing problem
+ * and has the main.
+ * @author Ara Megerdichian and Riley Slater
+ *
+ */
+
 public class BinPacker {
 
+	/**
+	 * This method does the first fit of the bin packing problem.
+	 * It will add to the first bin until capacity would be exceeded,
+	 * then creates a new bin and so on.
+	 * @param next_input An integer being added to the bin.
+	 * @param capacity An integer the total amount the bin can hold.
+	 * @param bin_array An array list using bins so we can have a dynamic amount of bins.
+	 * @return The current bin or a new bin if one was made.
+	 */
     static Bin firstFit(int next_input, int capacity, ArrayList<Bin> bin_array) {
         Bin bin;
         try {
@@ -32,6 +48,18 @@ public class BinPacker {
         }
     }
 
+    /**
+     * This method performs the best fit of the bin packing problem.
+     * It runs the same as first fit the only difference is if
+     * a previous bin has enough remaining space to accommodate the 
+     * new input it will place it into the existing bin before creating a new one.
+     * This method also uses a binary search tree as a data structure to sort the bins
+     * based on amount remaining.
+     * @param next_input The integer being added to the bins.
+     * @param capacity An integer that is the total amount of the bin.
+     * @param bin_array A dynamic array list of bins.
+     * @return The current bin or a new on if need be.
+     */
     static Bin bestFit(int next_input, int capacity, ArrayList<Bin> bin_array) {
         if (bin_array.isEmpty()) {
             bin_array.add(new Bin(0, capacity, 0));
@@ -57,6 +85,15 @@ public class BinPacker {
         return new_bin;
     }
 
+    /**
+     * this method is similar to the best fit but instead it looks to
+     * add the new item to the existing bin the has the most amount of remaining
+     * space. This also uses a binary search tree and sorts by remaining.
+     * @param next_input The integer being added to the bin.
+     * @param capacity The total amount the bin can hold.
+     * @param bin_array A dynamic array list of bins.
+     * @return The current bin or a new on if need be.
+     */
     static Bin worstFit(int next_input, int capacity, ArrayList<Bin> bin_array) {
         if (bin_array.isEmpty()) {
             bin_array.add(new Bin(0, capacity, 0));
@@ -82,12 +119,24 @@ public class BinPacker {
         return new_bin;
     }
 
+    /**
+     * This method writes the information from the bins to the an output file.
+     * @param myWriter A writing object.
+     * @param printable_list The array list of bins that will be written.
+     * @throws IOException
+     */
     static void print_list(FileWriter myWriter, ArrayList<Bin> printable_list) throws IOException {
         for (Bin bin: printable_list) {
             myWriter.write(bin.toString());
         }
     }
 
+    /**
+     * This is the main method that reads in the data to the bins and calls
+     * the methods above. It also writes our conclusions to the output file.
+     * @param args The command line arguments given.
+     * @throws FileNotFoundException
+     */
     public static void main(String [] args) throws FileNotFoundException {
         int capacity = Integer.parseInt(args[0]);
         Scanner scanner = new Scanner(new File(args[1]));
@@ -142,5 +191,6 @@ public class BinPacker {
                 System.out.println("Unexpected Error.");
                 e.printStackTrace();
             }
+        }
     }
 }

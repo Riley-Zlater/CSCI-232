@@ -142,7 +142,5 @@ public class BinPacker {
                 System.out.println("Unexpected Error.");
                 e.printStackTrace();
             }
-
-        }
     }
 }

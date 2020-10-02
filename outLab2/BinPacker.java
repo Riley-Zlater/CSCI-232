@@ -122,10 +122,13 @@ public class BinPacker {
                     System.out.println("File updated: " + myFile.getName());
                 }
                 FileWriter myWriter = new FileWriter("BinPackerOutput.txt");
+                myWriter.write("\nFirst-fit");
                 print_list(myWriter, first_fit_bin_array);
                 myWriter.write("\nFirst-fit used " + first_fit_bin_array.size() + " bins.\n");
+                myWriter.write("\nBest-fit");
                 print_list(myWriter, best_fit_bin_array);
                 myWriter.write("\nBest-fit used " + best_fit_bin_array.size() + " bins.\n");
+                myWriter.write("\nWorst-fit");
                 print_list(myWriter, worst_fit_bin_array);
                 myWriter.write("\nWorst-fit used " + worst_fit_bin_array.size() + " bins.\n");
                 myWriter.write("\nOn average first fit would be the fastest with a run time of O(n)."

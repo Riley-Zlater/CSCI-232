@@ -1,4 +1,4 @@
-package OutLab2;
+package outLab2;
 
 import java.io.File;
 import java.io.FileNotFoundException;

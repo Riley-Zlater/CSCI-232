@@ -7,11 +7,11 @@ public class Bin {
     private int occupancy;
     private int remaining;
 
-    public Bin(int n, int c, int o) {
-        this.bin_number = n;
-        this.capacity = c;
-        this.occupancy = o;
-        this.remaining = c - o;
+    public Bin(int number, int capacity, int occupancy) {
+        this.bin_number = number;
+        this.capacity = capacity;
+        this.occupancy = occupancy;
+        this.remaining = capacity - occupancy;
     }
 
     public Bin() {
@@ -54,6 +54,6 @@ public class Bin {
     }
 
     public String toString() {
-        return ("Bin number: " + bin_number + "\nRemaining: " + remaining);
+        return ("\nBin Number:" + bin_number + " Occupancy:"  + occupancy + " Remaining:" + remaining);
     }
 }

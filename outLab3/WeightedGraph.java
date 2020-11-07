@@ -1,56 +1,78 @@
 package outLab3;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
+
+/**
+ * This Java file makes an edge weighted graph and implements Dijkstra's algorithm.
+ * 
+ * @author Ara Megerdichian
+ *
+ * @author Riley Slater
+ */
 
 public class WeightedGraph {
     private Set<WeightedNodes> nodes;
     private boolean directed;
 
+    // Constructor
+    /**
+     * This constructs a weighted graph as a hash set of nodes.
+     * 
+     * @param directed Boolean that tells whether the graph is directed or undirected.
+     */
     WeightedGraph(boolean directed) {
         this.directed = directed;
         nodes = new HashSet<>();
     }
 
+    // Methods
+    /**
+     * This method adds each node to the hash set.
+     * 
+     * @param n Node that is being added to the hash set.
+     */
     public void addNode(WeightedNodes... n) {
-        // We're using a var arg method so we don't have to call
-        // addNode repeatedly
         nodes.addAll(Arrays.asList(n));
     }
-    
+
+    /**
+     * This method lets us add an edge between two nodes.
+     * 
+     * @param source Node that we're starting from.
+     * @param destination Node that we're going to.
+     * @param weight Double the weight of the edge between the source and destination.
+     */
     public void addEdge(WeightedNodes source, WeightedNodes destination, double weight) {
-        // Since we're using a Set, it will only add the nodes
-        // if they don't already exist in our graph
         nodes.add(source);
         nodes.add(destination);
 
-        // We're using addEdgeHelper to make sure we don't have duplicate edges
-        addEdgeHelper(source, destination, weight);
+        edgeHelper(source, destination, weight);
 
         if (!directed && source != destination) {
-            addEdgeHelper(destination, source, weight);
+            edgeHelper(destination, source, weight);
         }
     }
 
-    private void addEdgeHelper(WeightedNodes a, WeightedNodes b, double weight) {
-        // Go through all the edges and see whether that edge has
-        // already been added
+    /**
+     * This method is a helper method to the addEdge method that makes sure there's no duplicate edges.
+     * 
+     * @param a Node that will be our source to test for duplicates.
+     * @param b Node that will be our destination to test for duplicates.
+     * @param weight Double that is the weight of the edge between Nodes a and b.
+     */
+    private void edgeHelper(WeightedNodes a, WeightedNodes b, double weight) {
         for (WeightedEdges edge : a.edges) {
             if (edge.source == a && edge.destination == b) {
-                // Update the value in case it's a different one now
                 edge.weight = weight;
                 return;
             }
         }
-        // If it hasn't been added already (we haven't returned
-        // from the for loop), add the edge
         a.edges.add(new WeightedEdges(a, b, weight));
     }
-    
+
+    /**
+     * This method formats and displays the edges between the Nodes.
+     */
     public void printEdges() {
         for (WeightedNodes node : nodes) {
             LinkedList<WeightedEdges> edges = node.edges;
@@ -67,113 +89,126 @@ public class WeightedGraph {
             System.out.println();
         }
     }
-    
+
+    /**
+     * This method check to see if an edge exists between two Nodes.
+     * 
+     * @param source Node that we're starting our test for an edge from.
+     * @param destination Node we're ending our test for an edge.
+     * @return Boolean whether or not there is an edge between the given Nodes.
+     */
     public boolean hasEdge(WeightedNodes source, WeightedNodes destination) {
         LinkedList<WeightedEdges> edges = source.edges;
         for (WeightedEdges edge : edges) {
-            // Again relying on the fact that all classes share the
-            // exact same WeightedNodes object
             if (edge.destination == destination) {
                 return true;
             }
         }
         return false;
     }
-    
+
+    /**
+     * Setter that sets the visited status of all the Nodes back to false.
+     */
     public void resetNodesVisited() {
         for (WeightedNodes node : nodes) {
             node.notVisit();
         }
     }
-    
-    public void DijkstraSP(WeightedNodes start, WeightedNodes end) {
-        // We keep track of which path gives us the shortest path for each node
-        // by keeping track how we arrived at a particular node, we effectively
-        // keep a "pointer" to the parent node of each node, and we follow that
-        // path to the start
-        HashMap<WeightedNodes, WeightedNodes> changedAt = new HashMap<>();
-        changedAt.put(start, null);
 
-        // Keeps track of the shortest path we've found so far for every node
-        HashMap<WeightedNodes, Double> shortestPathMap = new HashMap<>();
+    /**
+     * This method does an iterative search through the Nodes to find a specific Node.
+     * 
+     * @param target Node that we are looking to find.
+     * @return Node that is being searched for.
+     */
+    public WeightedNodes searchNodes(String target) {
+        for (WeightedNodes node: nodes) {
+            if (node.title.equals(target)) {
+                return node;
+            }
+        }
+        return null;
+    }
 
-        // Setting every node's shortest path weight to positive infinity to start
-        // except the starting node, whose shortest path weight is 0
+    /**
+     * This method implements the Dijkstra's algorithm.
+     * 
+     * @param start Node that we begin the shortest path search at.
+     * @param end Node that we're looking to find the shortest path to.
+     */
+    public void DSP(WeightedNodes start, WeightedNodes end) {
+        HashMap<WeightedNodes, WeightedNodes> changeSpot = new HashMap<>();
+        changeSpot.put(start, null);
+
+        HashMap<WeightedNodes, Double> shortestPath = new HashMap<>();
+
         for (WeightedNodes node : nodes) {
             if (node == start)
-                shortestPathMap.put(start, 0.0);
-            else shortestPathMap.put(node, Double.POSITIVE_INFINITY);
+                shortestPath.put(start, 0.0);
+            else shortestPath.put(node, Double.POSITIVE_INFINITY);
         }
 
-        // Now we go through all the nodes we can go to from the starting node
-        // (this keeps the loop a bit simpler)
         for (WeightedEdges edge : start.edges) {
-            shortestPathMap.put(edge.destination, edge.weight);
-            changedAt.put(edge.destination, start);
+            shortestPath.put(edge.destination, edge.weight);
+            changeSpot.put(edge.destination, start);
         }
 
         start.visit();
 
-        // This loop runs as long as there is an unvisited node that we can
-        // reach from any of the nodes we could till then
         while (true) {
-            WeightedNodes currentNode = closestReachableUnvisited(shortestPathMap);
-            // If we haven't reached the end node yet, and there isn't another
-            // reachable node the path between start and end doesn't exist
-            // (they aren't connected)
+            WeightedNodes currentNode = closestReachableNotVisited(shortestPath);
+            
             if (currentNode == null) {
-                System.out.println("There isn't a path between " + start.title + " and " + end.title);
+                System.out.println("\nThere isn't a path between " + start.title + " and " + end.title);
                 return;
             }
 
-            // If the closest non-visited node is our destination, we want to print the path
             if (currentNode == end) {
-                System.out.println("The path with the smallest weight between "
-                                       + start.title + " and " + end.title + " is:");
+                System.out.println("\nThe path with the smallest weight between "
+                        + start.title + " and " + end.title + " is:");
 
                 WeightedNodes child = end;
 
-                // It makes no sense to use StringBuilder, since
-                // repeatedly adding to the beginning of the string
-                // defeats the purpose of using StringBuilder
                 String path = end.title;
                 while (true) {
-                    WeightedNodes parent = changedAt.get(child);
+                    WeightedNodes parent = changeSpot.get(child);
                     if (parent == null) {
                         break;
                     }
 
-                    // Since our changedAt map keeps track of child -> parent relations
-                    // in order to print the path we need to add the parent before the child and
-                    // it's descendants
-                    path = parent.title + " " + path;
+                    path = parent.title + " -> " + path;
                     child = parent;
                 }
                 System.out.println(path);
-                System.out.println("The path costs: " + shortestPathMap.get(end));
+                System.out.println("Total distance: " + shortestPath.get(end));
                 return;
             }
             currentNode.visit();
 
-            // Now we go through all the unvisited nodes our current node has an edge to
-            // and check whether its shortest path value is better when going through our
-            // current node than whatever we had before
             for (WeightedEdges edge : currentNode.edges) {
                 if (edge.destination.wasVisited())
                     continue;
 
-                if (shortestPathMap.get(currentNode)
-                   + edge.weight
-                   < shortestPathMap.get(edge.destination)) {
-                    shortestPathMap.put(edge.destination,
-                                       shortestPathMap.get(currentNode) + edge.weight);
-                    changedAt.put(edge.destination, currentNode);
+                if (shortestPath.get(currentNode)
+                        + edge.weight
+                        < shortestPath.get(edge.destination)) {
+                    shortestPath.put(edge.destination,
+                            shortestPath.get(currentNode) + edge.weight);
+                    changeSpot.put(edge.destination, currentNode);
                 }
             }
         }
     }
-    
-    private WeightedNodes closestReachableUnvisited(HashMap<WeightedNodes, Double> shortestPathMap) {
+
+    /**
+     * This is a helper method for the Dijkstra's algorithm that checks to see which Nodes have
+     * edges connected to the current not and of those edges which have not been visited.
+     * 
+     * @param shortestPath Hash map of the smallest weighted edges of Nodes on our path.
+     * @return Node that has not been visited and is the smallest weight.
+     */
+    private WeightedNodes closestReachableNotVisited(HashMap<WeightedNodes, Double> shortestPath) {
 
         double shortestDistance = Double.POSITIVE_INFINITY;
         WeightedNodes closestReachableNode = null;
@@ -181,7 +216,7 @@ public class WeightedGraph {
             if (node.wasVisited())
                 continue;
 
-            double currentDistance = shortestPathMap.get(node);
+            double currentDistance = shortestPath.get(node);
             if (currentDistance == Double.POSITIVE_INFINITY)
                 continue;
 
@@ -192,5 +227,4 @@ public class WeightedGraph {
         }
         return closestReachableNode;
     }
-    
 }

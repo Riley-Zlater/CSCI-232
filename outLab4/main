@@ -1,8 +1,7 @@
 import java.io.*;
+import java.util.*;
 
-public class Main {
-
-    public static void main(String[] args) {
+public static void main(String[] args) {
         String d_directory;
         String input_directory;
         try {
@@ -21,11 +20,12 @@ public class Main {
         String out_file_name = "C:\\Users\\aramj\\OneDrive\\Java_232_Projects_(OneDrive)\\Text_Files\\output.txt";
         BufferedReader dictionary_reader;
         BufferedReader input_reader;
+        TrieST<String> trie = new TrieST<>();
         try {
             dictionary_reader = new BufferedReader(new FileReader(d_directory));
             String d_word = dictionary_reader.readLine();
             while (d_word != null) {
-                // TODO add word to trie "dictionary"
+                trie.put(d_word, d_word);
                 d_word = dictionary_reader.readLine();
             }
             dictionary_reader.close();
@@ -35,18 +35,21 @@ public class Main {
             while (line != null) {
                 String[] word_array = line.split(" ");
                 for (String word : word_array) {
-                    // TODO search trie "dictionary" for word
-                    // TODO if word not found, grab 3 words around it
-                    boolean misspelled = false;
-                    if (misspelled) {
-                        String misspelled_word = "";
-                        String word1 = "";
-                        String word2 = "";
-                        String word3 = "";
+                    word = word.toLowerCase();
+                    word = word.replaceAll("[^a-zA-Z ]", "");
+                    if(!trie.contains(word)) {
+                        ArrayList<String> list = new ArrayList<>();
+                        for(String w: trie.keysWithPrefix(word)) {
+                            System.out.println(word);
+                            list.add(w);
+                        }
+                        String misspelled_word = word;
+                        String word1 = list.get(0);
+                        String word2 = list.get(1);
+                        String word3 = list.get(2);
                         Menu menu = new Menu();
                         String new_word = menu.menu(misspelled_word, word1, word2, word3);
                         out_file.printf("%s ", new_word);
-
                     } else {
                         out_file.printf("%s ", word);
                     }
@@ -59,6 +62,6 @@ public class Main {
         } catch (IOException i) {
             i.printStackTrace();
         }
-        System.out.println("Input file corrected.\nTerminating program...");
+        System.out.println("Input file corrected in output.txt.\nTerminating program...");
     }
 }

@@ -1,0 +1,64 @@
+import java.io.*;
+
+public class Main {
+
+    public static void main(String[] args) {
+        String d_directory;
+        String input_directory;
+        try {
+            d_directory = args[0];
+            input_directory = args[1];
+            System.out.println("Inputted dictionary directory: " + d_directory);
+            System.out.println("Inputted input file directory: " + input_directory);
+        } catch(IndexOutOfBoundsException e) {
+            System.out.println("Invalid arguments entered.");
+            d_directory = "null";
+            input_directory = "null";
+        }
+        System.out.println("\nReading files...");
+
+        // Reads file
+        String out_file_name = "C:\\Users\\aramj\\OneDrive\\Java_232_Projects_(OneDrive)\\Text_Files\\output.txt";
+        BufferedReader dictionary_reader;
+        BufferedReader input_reader;
+        try {
+            dictionary_reader = new BufferedReader(new FileReader(d_directory));
+            String d_word = dictionary_reader.readLine();
+            while (d_word != null) {
+                // TODO add word to trie "dictionary"
+                d_word = dictionary_reader.readLine();
+            }
+            dictionary_reader.close();
+            input_reader = new BufferedReader(new FileReader(input_directory));
+            PrintWriter out_file = new PrintWriter(new FileWriter(out_file_name));
+            String line = input_reader.readLine();
+            while (line != null) {
+                String[] word_array = line.split(" ");
+                for (String word : word_array) {
+                    // TODO search trie "dictionary" for word
+                    // TODO if word not found, grab 3 words around it
+                    boolean misspelled = false;
+                    if (misspelled) {
+                        String misspelled_word = "";
+                        String word1 = "";
+                        String word2 = "";
+                        String word3 = "";
+                        Menu menu = new Menu();
+                        String new_word = menu.menu(misspelled_word, word1, word2, word3);
+                        out_file.printf("%s ", new_word);
+
+                    } else {
+                        out_file.printf("%s ", word);
+                    }
+                }
+                out_file.printf("\n");
+                line = input_reader.readLine();
+            }
+            input_reader.close();
+            out_file.close();
+        } catch (IOException i) {
+            i.printStackTrace();
+        }
+        System.out.println("Input file corrected.\nTerminating program...");
+    }
+}

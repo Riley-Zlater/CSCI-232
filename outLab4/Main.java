@@ -3,6 +3,15 @@ package outLab4;
 import java.io.*;
 import java.util.*;
 
+/**
+ * This is the main java driver class.
+ * 
+ * @author Ara Megerdichian
+ * 
+ * @author Riley Slater
+ *
+ */
+
 public class Main {
 
     public static void main(String[] args) {

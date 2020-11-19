@@ -8,6 +8,9 @@ public class Main {
     public static void main(String[] args) {
         String d_directory;
         String input_directory;
+        
+        // try and get the input files from the cmd line
+        
         try {
             d_directory = args[0];
             input_directory = args[1];
@@ -20,7 +23,9 @@ public class Main {
         }
         System.out.println("\nReading files...");
 
-        // Reads file
+        // Reads file, in hindsight the file reading and formatting 
+        // should've been done in a separate java class.
+        
         String out_file_name = "C:\\Users\\Ara\\OneDrive\\Java_232_Projects_(OneDrive)\\Text_Files\\output.txt";
         BufferedReader dictionary_reader;
         BufferedReader input_reader;
@@ -41,11 +46,23 @@ public class Main {
                 for (String word : word_array) {
                     word = word.toLowerCase();
                     word = word.replaceAll("[^a-zA-Z ]", "");
+                    
+                    // Search the Trie only if the word we come across is NOT already in the Trie
+                    
                     if(!trie.contains(word)) {
                         ArrayList<String> list = new ArrayList<>();
+                        
+                        // Use the keys with prefix method to find all the strings in our 
+                        // Trie that have similar prefixes to the misspelled word
+                        // Then add thi strings with similar prefixes to a list
+                        
                         for(String w: trie.keysWithPrefix(word)) {
                             list.add(w);
                         }
+                        
+                        // if there are at least 3 words with similar prefixes 
+                        // get those words and pass all of our information through the menu
+                        
                         if (list.size() >= 3) {
                             String misspelled_word = word;
                             String word1 = list.get(0);

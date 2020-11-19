@@ -1,3 +1,5 @@
+package outLab4;
+
 import java.util.*;
 
 public class Menu {
@@ -33,7 +35,8 @@ public class Menu {
                 new_word = menu(misspelled_word, word1, word2, word3);
                 break;
         }
-        return new_word;
+        scanner.close();
+        return new_word;   
     }
 
 }

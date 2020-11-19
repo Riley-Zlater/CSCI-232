@@ -35,7 +35,7 @@ public class Main {
         // Reads file, in hindsight the file reading and formatting 
         // should've been done in a separate java class.
         
-        String out_file_name = "C:\\Users\\Ara\\OneDrive\\Java_232_Projects_(OneDrive)\\Text_Files\\output.txt";
+        String out_file_name = "output.txt";
         BufferedReader dictionary_reader;
         BufferedReader input_reader;
         TrieST<String> trie = new TrieST<>();

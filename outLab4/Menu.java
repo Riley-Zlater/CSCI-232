@@ -2,6 +2,16 @@ package outLab4;
 
 import java.util.*;
 
+/**
+ * This java class will make the menu for the user to use and fix their spelling mistake.
+ * 
+ * 
+ * @author Ara Megerdichian
+ * 
+ * @author Riley Slater
+ *
+ */
+
 public class Menu {
 
 	/**
